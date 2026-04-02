@@ -1,0 +1,30 @@
+# Build artifacts
+web/app.wasm
+web/wasm_exec.js
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Go
+*.exe
+*.test
+*.out
+vendor/
+
+# Example (Vite + React)
+example/node_modules/
+example/dist/
+example/public/app.wasm
+example/public/wasm_exec.js
+example/public/glue.js
+
+# Environment
+.env
+.env.*

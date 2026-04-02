@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wasmflux-go</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: monospace; background: #1a1a2e; color: #e0e0e0; padding: 24px; }
+        h1 { color: #00d4ff; margin-bottom: 16px; }
+        #status { padding: 8px 12px; border-radius: 4px; margin-bottom: 16px; font-size: 14px; }
+        .loading { background: #2a2a4a; color: #ffd700; }
+        .ready { background: #1a3a1a; color: #00ff88; }
+        .error { background: #3a1a1a; color: #ff4444; }
+        #log { background: #0a0a1a; border: 1px solid #333; border-radius: 4px; padding: 12px; height: 400px; overflow-y: auto; font-size: 13px; line-height: 1.6; }
+        .log-debug { color: #888; }
+        .log-info { color: #00d4ff; }
+        .log-warn { color: #ffd700; }
+        .log-error { color: #ff4444; }
+    </style>
+</head>
+<body>
+    <h1>wasmflux-go</h1>
+    <div id="status" class="loading">Loading WASM...</div>
+    <div id="log"></div>
+
+    <script src="wasm_exec.js"></script>
+    <script src="glue.js"></script>
+    <script>
+        (async () => {
+            const statusEl = document.getElementById("status");
+            try {
+                const go = new Go();
+                const result = await WebAssembly.instantiateStreaming(
+                    fetch("app.wasm"),
+                    go.importObject
+                );
+                go.run(result.instance);
+                statusEl.textContent = "WASM Ready";
+                statusEl.className = "ready";
+            } catch (err) {
+                statusEl.textContent = "Error: " + err.message;
+                statusEl.className = "error";
+                console.error(err);
+            }
+        })();
+    </script>
+</body>
+</html>
